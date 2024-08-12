@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.day-counter" path="org/gnome/shell/extensions/day-counter">
+  <schema id="org.gnome.shell.extensions.day-counter" path="/org/gnome/shell/extensions/day-counter/">
     
     <key type="s" name="name-string">
     <default>"Counter"</default>
