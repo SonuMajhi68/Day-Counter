@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.day-counter" path="org/gnome/shell/extensions/day-counter">
+    
+    <key type="s" name="name-string">
+    <default>"Counter"</default>
+    <summary>Name string</summary>
+    <description/>
+    </key>
+
+    <key type="s" name="icon-string">
+    <default>"network-vpn-symbolic"</default>
+    <summary>Icon string</summary>
+    <description/>
+    </key>
+
+    <key type="b" name="counter-boolean">
+    <default>false</default>
+    <summary>Count up/Down</summary>
+    <description/>
+    </key>
+
+    <key type="i" name="target-year">
+      <default>2022</default>
+      <summary>Target year</summary>
+      <description/>
+    </key>
+
+    <key type="i" name="target-month">
+      <default>6</default>
+      <summary>Target month</summary>
+      <description/>
+    </key>
+
+    <key type="i" name="target-day">
+      <default>16</default>
+      <summary>Target day</summary>
+      <description/>
+    </key>
+
+    <key type="as" name="counter-list">
+        <default>[ ]</default>
+        <summary>Counter list</summary>
+        <description>A list of strings, each containing an counter details</description>
+    </key>
+
+  </schema>
+</schemalist>
