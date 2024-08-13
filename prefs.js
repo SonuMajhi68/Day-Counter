@@ -53,10 +53,60 @@ export default class DayCounterPreferences extends ExtensionPreferences {
             description: _('Create/Select your counter to add on tray'),
         });
 
+        const appearanceGroup = new Adw.PreferencesGroup({
+            title: _("Appearance"),
+            description: _('Adjust the position of Indicator in statusbar'),
+        });
+
+
+
+        // This area for "appearanceGroup"
+        const positionOptions = new Gtk.StringList();
+        positionOptions.append(_("Left"));
+        positionOptions.append(_("Center"));
+        positionOptions.append(_("Right"));
+
+        const indicatorPositionComboRow = new Adw.ComboRow({
+            title: _("Indicator position"),
+            subtitle: _("Position of the extension in the panel"),
+            model: positionOptions,
+            selected: settings.get_enum("indicator-position"),
+        });
+
+        indicatorPositionComboRow.connect("notify::selected", (comboRow) => {
+            settings.set_enum("indicator-position", comboRow.selected);
+        });
+        appearanceGroup.add(indicatorPositionComboRow);
+
+        const indicatorIndexActionRow = new Adw.ActionRow({
+            title: _("Indicator index"),
+            subtitle: _("Index of the Indicator in the panel"),
+        });
+        appearanceGroup.add(indicatorIndexActionRow);
+
+        const indicatorIndexSpinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+              lower: 0,
+              upper: 10,
+              stepIncrement: 1,
+            }),
+            numeric: true,
+            marginTop: 10,
+            marginBottom: 10,
+        });
+        indicatorIndexActionRow.add_suffix(indicatorIndexSpinButton);
+        indicatorIndexActionRow.set_activatable_widget(indicatorIndexSpinButton);
+      
+        settings.bind("indicator-index", indicatorIndexSpinButton, "value", Gio.SettingsBindFlags.DEFAULT);
+
+
         page.add(group);
+        page.add(appearanceGroup);
         window.add(page);
 
 
+
+        // Refresh the Counter List
         const refreshList = () => {
             let list = settings.get_strv('counter-list');
 
@@ -105,10 +155,8 @@ export default class DayCounterPreferences extends ExtensionPreferences {
 
             const copyGroupList = {...groupList};
             for (let i in copyGroupList) {
-                // log(`this is test value: ${i}`);
                 
                 groupList[i].DeleteButton.connect('clicked', () => {
-                    // removeItems(list[i]);
                     settings.set_strv('counter-list',
                         settings.get_strv('counter-list').filter((id) => {  // this need to be fixed
                             return id.split(',')[0] !== i;
@@ -116,11 +164,7 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                     );
                     group.remove(groupList[i].Row);
 
-                    // log(`out : ${i}`);
                     delete groupList[i];
-                    // for(let j in groupList)
-                    //     log(`in : ${j}`);
-
                 });
             }
         }
@@ -129,7 +173,7 @@ export default class DayCounterPreferences extends ExtensionPreferences {
 
         refreshList();
 
-        const addRow = () => {
+        const addCounter = () => {
 
             const addDialog = new Adw.PreferencesDialog();
 
@@ -164,6 +208,7 @@ export default class DayCounterPreferences extends ExtensionPreferences {
             const counterNameEntryBuffer = new Gtk.EntryBuffer();
             settings.bind("name-string", counterNameEntryBuffer, "text", Gio.SettingsBindFlags.DEFAULT);
           
+            
             const counterNameEntry = new Gtk.Entry({
                 buffer: counterNameEntryBuffer,
                 marginTop: 10,
@@ -255,11 +300,9 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                 });
             }
 
-
             saveButton.connect('clicked', () => prepList(addDialog));
 
             addDialog.present(window);
-
         };
 
         const prepList = (addDialog) => {
@@ -281,14 +324,12 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                 const val = ele.split(',')
             })
 
-            
             refreshList();
 
             addDialog.close();
         }
 
-
-        addAppsButton.connect('clicked', addRow);
+        addAppsButton.connect('clicked', addCounter);
 
         window._settings = this.getSettings();
     }

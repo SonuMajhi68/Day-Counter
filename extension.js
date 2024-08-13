@@ -18,10 +18,12 @@ export default class DayCounterExtension extends Extension {
 
         this._updateIndicators(myArray);
 
-        this._signalHandler = this._settings.connect("changed::counter-list", (setting,key) => {
-            const arr = setting.get_strv('counter-list');
-            this._removeIndicator();
-            this._updateIndicators(arr);
+        this._signalHandler = this._settings.connect("changed", (setting,key) => {
+            if (key === "counter-list" | key === "indicator-position" | key === "indicator-index"){
+                const arr = setting.get_strv('counter-list');
+                this._removeIndicator();
+                this._updateIndicators(arr);
+            }
         })
     }
 
@@ -70,7 +72,12 @@ export default class DayCounterExtension extends Extension {
                 hbox.add_child(label);
                 indicator.add_child(hbox);
                 
-                Main.panel.addToStatusArea(this.uuid + val[0], indicator);
+                Main.panel.addToStatusArea(
+                    this.uuid + val[0],
+                    indicator,
+                    this._settings.get_int("indicator-index"),
+                    this._settings.get_string("indicator-position")
+                );
 
                 const timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, () => {
                     this._updateLabels(label, val[0], val[4], val[5], val[6], val[3]);
