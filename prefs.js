@@ -5,7 +5,7 @@ import Adw from 'gi://Adw';
 import GLib from "gi://GLib";
 import GObject from 'gi://GObject';
 
-import {ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 
 
@@ -23,7 +23,7 @@ function simpleHash() {
 
     const hash = timestamp + randomNum; // Simple hash function (replace with a more robust one if needed)
 
-    return hash.toString().substring(7,13);
+    return hash.toString().substring(7, 13);
 }
 
 
@@ -86,9 +86,9 @@ export default class DayCounterPreferences extends ExtensionPreferences {
 
         const indicatorIndexSpinButton = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
-              lower: 0,
-              upper: 10,
-              stepIncrement: 1,
+                lower: 0,
+                upper: 10,
+                stepIncrement: 1,
             }),
             numeric: true,
             marginTop: 10,
@@ -96,7 +96,7 @@ export default class DayCounterPreferences extends ExtensionPreferences {
         });
         indicatorIndexActionRow.add_suffix(indicatorIndexSpinButton);
         indicatorIndexActionRow.set_activatable_widget(indicatorIndexSpinButton);
-      
+
         settings.bind("indicator-index", indicatorIndexSpinButton, "value", Gio.SettingsBindFlags.DEFAULT);
 
 
@@ -111,10 +111,10 @@ export default class DayCounterPreferences extends ExtensionPreferences {
             let list = settings.get_strv('counter-list');
 
 
-            for(let i in list){
+            for (let i in list) {
                 let str = list[i].split(',');
 
-                if(!groupList.hasOwnProperty(str[0])){
+                if (!groupList.hasOwnProperty(str[0])) {
                     groupList[str[0]] = {};
                     groupList[str[0]].ButtonBox = new Gtk.Box({
                         orientation: Gtk.Orientation.HORIZONTAL,
@@ -146,16 +146,16 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                     groupList[str[0]].ButtonBox.append(groupList[str[0]].DeleteButton);
                     groupList[str[0]].Row.add_prefix(appIcon);
                     groupList[str[0]].Row.add_suffix(groupList[str[0]].ButtonBox);
-                    
+
                     group.add(groupList[str[0]].Row);
                 }
             }
-            
-            
 
-            const copyGroupList = {...groupList};
+
+
+            const copyGroupList = { ...groupList };
             for (let i in copyGroupList) {
-                
+
                 groupList[i].DeleteButton.connect('clicked', () => {
                     settings.set_strv('counter-list',
                         settings.get_strv('counter-list').filter((id) => {  // this need to be fixed
@@ -204,11 +204,11 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                 subtitle: _("Hint: GATE Counter"),
             });
             dialogGroup.add(counterName);
-          
+
             const counterNameEntryBuffer = new Gtk.EntryBuffer();
             settings.bind("name-string", counterNameEntryBuffer, "text", Gio.SettingsBindFlags.DEFAULT);
-          
-            
+
+
             const counterNameEntry = new Gtk.Entry({
                 buffer: counterNameEntryBuffer,
                 marginTop: 10,
@@ -228,10 +228,10 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                 subtitle: _("Hint: network-vpn-symbolic"),
             });
             dialogGroup.add(counterIcon);
-          
+
             const counterIconEntryBuffer = new Gtk.EntryBuffer();
             settings.bind("icon-string", counterIconEntryBuffer, "text", Gio.SettingsBindFlags.DEFAULT);
-          
+
             const counterIconEntry = new Gtk.Entry({
                 buffer: counterIconEntryBuffer,
                 marginTop: 10,
@@ -266,7 +266,7 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                 subtitle: _("Date in YYYY/MM/DD Format"),
             });
             dialogGroup.add(targetDate);
-            
+
             const targetDateButton = new Gtk.MenuButton({
                 label: formatTargetDate(targetYear, targetMonth, targetDay),
                 marginTop: 10,
@@ -274,10 +274,10 @@ export default class DayCounterPreferences extends ExtensionPreferences {
             });
             targetDate.add_suffix(targetDateButton);
             targetDate.set_activatable_widget(targetDateButton);
-            
+
             const targetDatePopOver = new Gtk.Popover();
             targetDateButton.set_popover(targetDatePopOver);
-        
+
             const targetCalender = new Gtk.Calendar();
             targetCalender.select_day(GLib.DateTime.new_local(targetYear, targetMonth, targetDay, 0, 0, 0));
             targetDatePopOver.set_child(targetCalender);
@@ -286,9 +286,9 @@ export default class DayCounterPreferences extends ExtensionPreferences {
                 const year = calendar.year;
                 const month = calendar.month + 1;
                 const day = calendar.day;
-          
+
                 targetDateButton.set_label(formatTargetDate(year, month, day));
-          
+
                 settings.set_int("target-year", year);
                 settings.set_int("target-month", month);
                 settings.set_int("target-day", day);
@@ -313,7 +313,7 @@ export default class DayCounterPreferences extends ExtensionPreferences {
             const month = settings.get_int('target-month');
             const day = settings.get_int('target-day');
             const hash = simpleHash();
-                
+
             const item = (`${hash},${name},${icon},${count},${year},${month},${day}`);
 
             let list = settings.get_strv('counter-list');
