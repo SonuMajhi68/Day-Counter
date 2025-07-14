@@ -30,5 +30,5 @@ gnome-extensions install -f $ZIP_NAME
 rm -rf $ZIP_NAME
 
 echo -e "\t[~~ Extension is installed ~~] 
-\n\tNow enable the extension at Entension Manager"
+\n\n\tNow re-login to desktop and enable the extension at Entension Manager"
 exit 0
