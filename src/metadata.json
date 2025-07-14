@@ -5,7 +5,10 @@
   "url": "https://github.com/SonuMajhi68/Day-Counter",
   "settings-schema": "org.gnome.shell.extensions.day-counter",
   "shell-version": [
-    "46"
+    "45",
+    "46",
+    "47",
+    "48"
   ],
   "version": 11
 }

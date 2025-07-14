@@ -1,0 +1,34 @@
+#! /bin/bash
+set -e
+
+NAME=day-counter
+DOMAIN=SonuMajhi68
+UUID=$NAME@$DOMAIN
+ZIP_NAME=$UUID.zip 
+
+# Findout gnome-shell version
+SHELL_VERSION=$(gnome-shell --version | cut -d ' ' -f3 | cut -d '.' -f1)
+
+if [[ $SHELL_VERSION -lt 46 ]]
+then
+    echo "This script is not for the gnome-shell versions below 45, Exiting with no changes."
+    exit 1
+fi
+
+echo -e "\n\t[~~ Day-Counter-extension ~~]\n"
+echo -e "\trunning the script...\n"
+echo -e "\t1. gnome-shell version $SHELL_VERSION detected"
+
+cd src
+
+echo -e "\t2. Creating zip file..."
+zip -qr $ZIP_NAME ./* && echo -e "\t3. zip file created"
+
+echo -e "\t4. Installing the extension from the zip file...\n"
+
+gnome-extensions install -f $ZIP_NAME
+rm -rf $ZIP_NAME
+
+echo -e "\t[~~ Extension is installed ~~] 
+\n\tNow enable the extension at Entension Manager"
+exit 0
